@@ -9,7 +9,7 @@ namespace UnityMirrorExample.Server
         public string Id { get; private set; }
         public string Name { get; protected set; }
         public string Status { get; private set; }
-
+        
 
         [SerializeField] protected TMP_Text text_id;
         [SerializeField] protected GameObject text_name;

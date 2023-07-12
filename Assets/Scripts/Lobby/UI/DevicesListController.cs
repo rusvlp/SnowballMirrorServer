@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Mirror;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -25,9 +26,13 @@ public class DevicesListController : MonoBehaviour
 
     private int minSiblingIndex = 0;
 
-
+    
     private GameObject knownSign;
 
+    
+    //singleton
+   public static DevicesListController Instance;
+    
     List<Glasses> unknownGlasses = new List<Glasses>()
     {
         
@@ -44,6 +49,8 @@ public class DevicesListController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Instance = this;
+        
         //Vector2 position = new Vector2(panelTitle.transform.position.x, panelTitle.transform.position.y - yDistance);
         GameObject instance = panelTitle;
         Vector2 position = new Vector2(instance.transform.position.x, instance.transform.position.y - yDistance);
@@ -91,6 +98,22 @@ public class DevicesListController : MonoBehaviour
         //NetworkManager = CustomNetworkManager.Instance;
        // CustomNetworkManager.Instance.devicesListController = this;
 
+       /*
+       EmptyPlayer ep1 = new EmptyPlayer()
+       {
+            PlayerIndex = 1,
+            Fingerprint = "aabbc"
+       };
+
+       EmptyPlayer ep2 = new EmptyPlayer()
+       {
+           PlayerIndex = 2,
+           Fingerprint = "asd"
+       };
+    
+       AddPlayer(ep1);
+       AddPlayer(ep2);
+       */
     }
 
     private void getConnetctions()
@@ -127,12 +150,12 @@ public class DevicesListController : MonoBehaviour
 
         if (name != "")
         {
-            Glasses kGlasses = new Glasses(player.Fingerprint, name, "Подключено");
+            Glasses kGlasses = new Glasses(player.Fingerprint, name, "Подключено", player);
             PutToKnown(kGlasses);
 
         } else
         {
-            Glasses g = new Glasses(player.Fingerprint, "Новое устройство", "Новое");
+            Glasses g = new Glasses(player.Fingerprint, "Новое устройство", "Новое", player);
             PutToUnknown(g);
             
         }
@@ -193,7 +216,7 @@ public class DevicesListController : MonoBehaviour
         GameObject instance = Instantiate(panelPrefab, parent.transform);
 
         var glassComponent = instance.GetComponent<UGlassesComponent>();
-
+        
 
         instance.GetComponent<UGlassesComponent>().DevicesListController = this;
         instance.GetComponent<UGlassesComponent>().Instance = instance;
@@ -203,6 +226,8 @@ public class DevicesListController : MonoBehaviour
 
 
         instance.transform.SetSiblingIndex(1);
+        
+        g.Player.SetKnown();
     }
 
     void Update()

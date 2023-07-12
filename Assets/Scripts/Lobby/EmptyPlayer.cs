@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class EmptyPlayer : NetworkBehaviour
 {
 
-    public int PlayerIndex;
+    public int PlayerGlobalIndex;
+    public int PlayerMatchIndex;
     public string Fingerprint;
+    public string Name;
+    public Status PlayerStatus = Status.InLobby;
     
     public static EmptyPlayer LocalPlayer;
     
@@ -32,7 +36,21 @@ public class EmptyPlayer : NetworkBehaviour
     [Command]
     public void CmdAddPlayerToList()
     {
-        LobbyManager.Instance.AddPlayerToList(this, out this.PlayerIndex);
-        print("Player added, it's index " + this.PlayerIndex);
+        LobbyManager.Instance.AddPlayerToList(this, out this.PlayerGlobalIndex);
+        DevicesListController.Instance.AddPlayer(this);
+        print("Player added, it's index " + this.PlayerGlobalIndex);
     }
+
+    public void SetKnown()
+    {
+        LobbyManager.Instance.SetPlayerKnown(this, out this.PlayerGlobalIndex);
+        print("Player with fingerprint " + this.Fingerprint + " is known now");
+    }
+}
+
+public enum Status
+{
+    InMatch,
+    InGame,
+    InLobby
 }

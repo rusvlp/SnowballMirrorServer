@@ -12,7 +12,7 @@ namespace UnityMirrorExample.Server
         public GameObject SaveButton;
         public GameObject EditField;
         public DevicesListController DevicesListController;
-
+        
         public void EditName()
         {
             text_name.SetActive(false);

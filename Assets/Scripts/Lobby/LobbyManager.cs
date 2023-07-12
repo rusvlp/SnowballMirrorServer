@@ -7,7 +7,8 @@ using UnityEngine;
 public class LobbyManager : NetworkBehaviour
 {
 
-    public SyncListGameObject Players = new SyncListGameObject();
+    public SyncListGameObject KnownPlayers = new SyncListGameObject();
+    public SyncListGameObject UnknownPlayers = new SyncListGameObject();
 
     [SerializeField] private DevicesListController devicesListController;
     
@@ -26,11 +27,29 @@ public class LobbyManager : NetworkBehaviour
 
     public void AddPlayerToList(EmptyPlayer p, out int index)
     {
+
+        if (PlayerPrefs.GetString(p.Fingerprint) == "")
+        {
+            UnknownPlayers.Add(p.gameObject);
+            index = UnknownPlayers.Count;
+        }
+        else
+        {
+            KnownPlayers.Add(p.gameObject);
+            index = KnownPlayers.Count;
+        }
         
-        Players.Add(p.gameObject);
-        index = Players.Count;
-        devicesListController.AddPlayer(p);
+       
+        //devicesListController.AddPlayer(p);
     }
+
+    public void SetPlayerKnown(EmptyPlayer emptyPlayer, out int newIndex)
+    {
+        UnknownPlayers.Remove(emptyPlayer.gameObject);
+        KnownPlayers.Add(emptyPlayer.gameObject);
+        newIndex = KnownPlayers.Count;
+    }
+    
 }
 
 [Serializable]
