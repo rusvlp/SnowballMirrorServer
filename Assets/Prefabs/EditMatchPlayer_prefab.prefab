@@ -33,10 +33,10 @@ RectTransform:
   m_Father: {fileID: 8673733098653502313}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 21.8, y: 26.6}
-  m_SizeDelta: {x: 21.1015, y: 20.3982}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -6.200001, y: -2.3999996}
+  m_SizeDelta: {x: 21.101501, y: 20.398201}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4439309586823056104
 CanvasRenderer:
@@ -53,7 +53,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3797997721552134813}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -199,7 +199,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3465230118394821638}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5461252188380178601}
+        m_TargetAssemblyTypeName: UIEditMatchPlayer, Assembly-CSharp
+        m_MethodName: Check
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5461252188380178601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,6 +225,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkIcon: {fileID: 7867598322271112961}
+  backgroundImage: {fileID: 3465230118394821638}
+  PlayerID: {fileID: 3183628158069509362}
+  Status: 0
 --- !u!1 &7893642173661615703
 GameObject:
   m_ObjectHideFlags: 0
