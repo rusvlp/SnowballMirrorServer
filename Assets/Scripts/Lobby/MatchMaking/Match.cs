@@ -7,9 +7,13 @@ public class Match : NetworkBehaviour
 {
     
     public string MatchID;
+    [SyncVar]
     public string Name;
     public SyncListGameObject Players = new();
-   
+    [SyncVar]    
+    public int MaxPlayers;
+
+    [SyncVar] public MatchStatus Status;
     
     
     public Match(string matchID, GameObject playerHost)
@@ -19,6 +23,10 @@ public class Match : NetworkBehaviour
         this.Players.Add(playerHost);
     }
 
+    public Match()
+    {
+        
+    }
     
     // Start is called before the first frame update
     void Start()
@@ -38,4 +46,8 @@ public class Match : NetworkBehaviour
 [System.Serializable]
 public class SyncListMatches : SyncList<Match>{}
 
-
+public enum MatchStatus
+{
+    Running, 
+    Ready
+}

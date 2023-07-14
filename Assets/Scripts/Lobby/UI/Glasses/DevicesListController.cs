@@ -150,12 +150,12 @@ public class DevicesListController : MonoBehaviour
 
         if (name != "")
         {
-            Glasses kGlasses = new Glasses(player.Fingerprint, name, "Подключено", player);
+            Glasses kGlasses = new Glasses(player.PlayerGlobalIndex.ToString(), name, "Подключено", player);
             PutToKnown(kGlasses);
 
         } else
         {
-            Glasses g = new Glasses(player.Fingerprint, "Новое устройство", "Новое", player);
+            Glasses g = new Glasses(player.PlayerGlobalIndex.ToString(), "Новое устройство", "Новое", player);
             PutToUnknown(g);
             
         }

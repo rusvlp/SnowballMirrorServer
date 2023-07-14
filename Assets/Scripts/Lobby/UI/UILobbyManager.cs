@@ -17,11 +17,12 @@ public class UILobbyManager : NetworkBehaviour
         {
             ServerCanvas.SetActive(true);
         }
-
-        if (isClient)
+        else
         {
             ClientCanvas.SetActive(true);
         }
+
+        
     }
 
     // Update is called once per frame

@@ -15,29 +15,35 @@ public class MatchMaker : NetworkBehaviour
     public SyncListMatches Matches = new();
     public SyncListString MatchIDs = new();
 
+    public static MatchMaker Instance;
 
-    public bool CreateMatch(string name, string matchID)
+    public Match CreateMatch(string name, string matchID, int maxPlayers)
     {
 
         if (!MatchIDs.Contains(matchID))
         {
             Match match = Instantiate(_matchPrefab);
             match.MatchID = matchID;
-
+            match.MaxPlayers = maxPlayers;
+            match.Name = name;
+            
+            
+            match.Status = MatchStatus.Ready;
+            
             match.GetComponent<NetworkMatch>().matchId = matchID.toGuid();
             
             Matches.Add(match);
             MatchIDs.Add(matchID);
             
             print($"Match with name {name} and {matchID} created successfully");
-            return true;
+            return match;
         }
         else
         {
             print($"Match with {matchID} is already exists");
         }
 
-        return false;
+        return null;
 
 
     }
@@ -64,7 +70,7 @@ public class MatchMaker : NetworkBehaviour
     
     void Start()
     {
-        
+        Instance = this;
     }
 
     
