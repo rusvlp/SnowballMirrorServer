@@ -4809,6 +4809,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sessionNameTmp: {fileID: 159533393}
   sessionMatchIdTmp: {fileID: 1048736512}
+  registeredPlayersParent: {fileID: 427517609}
+  editMatchPlayerPrefab: {fileID: 5491250342915308730, guid: 272b6ef1e1d257c47be76bba2eb7cae0, type: 3}
 --- !u!1 &1038202769
 GameObject:
   m_ObjectHideFlags: 0
