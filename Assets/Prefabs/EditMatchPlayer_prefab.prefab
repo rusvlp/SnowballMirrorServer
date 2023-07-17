@@ -228,6 +228,8 @@ MonoBehaviour:
   backgroundImage: {fileID: 3465230118394821638}
   PlayerID: {fileID: 3183628158069509362}
   Status: 0
+  originalColor: {r: 1, g: 0.53333336, b: 0.53333336, a: 1}
+  _player: {fileID: 0}
 --- !u!1 &7893642173661615703
 GameObject:
   m_ObjectHideFlags: 0

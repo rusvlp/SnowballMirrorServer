@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Mirror
 {
@@ -257,7 +256,7 @@ namespace Mirror
             }
         }
 
-        public void Add(Component item)
+        public void Add(T item)
         {
             objects.Add(item);
             AddOperation(Operation.OP_ADD, objects.Count - 1, default, item, true);

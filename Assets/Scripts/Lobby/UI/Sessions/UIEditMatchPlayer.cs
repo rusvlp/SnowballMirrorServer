@@ -11,14 +11,17 @@ public class UIEditMatchPlayer : MonoBehaviour
     
     public TMP_Text PlayerID;
     public UIPlayerStatus Status = UIPlayerStatus.Global;
+    [SerializeField]
     private Color originalColor;
     
+    [SerializeField]
     private EmptyPlayer _player = new EmptyPlayer
     {
         PlayerGlobalIndex = 1,
         PlayerMatchIndex = 1,
         Fingerprint = "Mock", 
-        Name = "Mock"
+        Name = "Mock",
+        PlayerStatus = global::Status.InLobby
     };
 
     public EmptyPlayer Player
@@ -33,7 +36,7 @@ public class UIEditMatchPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        originalColor = backgroundImage.color;
+       // originalColor = backgroundImage.color;
     }
 
     // Update is called once per frame
@@ -76,6 +79,7 @@ public class UIEditMatchPlayer : MonoBehaviour
     public void ChangeBackgroundColor(Color newColor)
     {
         backgroundImage.color = newColor;
+        print($"{newColor.r}, {newColor.g}, {newColor.b}, {newColor.a}");
     }
 
     public void ResetBackgroundColor()

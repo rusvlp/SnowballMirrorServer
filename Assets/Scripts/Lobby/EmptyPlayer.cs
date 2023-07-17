@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 public class EmptyPlayer : NetworkBehaviour
@@ -14,6 +15,16 @@ public class EmptyPlayer : NetworkBehaviour
     public Status PlayerStatus = Status.InLobby;
     
     public static EmptyPlayer LocalPlayer;
+
+    #if DEVELOPMENT_BUILD
+    public void SetFields(int playerGlobalIndex, int playerMatchIndex, string fingerprint, Status playerStatus)
+    {
+        this.PlayerGlobalIndex = playerGlobalIndex;
+        this.PlayerMatchIndex = playerMatchIndex;
+        this.Fingerprint = fingerprint;
+        this.PlayerStatus = playerStatus;
+    }
+    #endif
     
     void Start()
     {
@@ -32,6 +43,30 @@ public class EmptyPlayer : NetworkBehaviour
         
     }
 
+    public void StartGame()
+    {
+        TargetStartGame();
+    }
+
+    public void StopGame()
+    {
+        print("Exiting...");
+        TargetStopGame();
+    }
+
+
+    [TargetRpc]
+    public void TargetStopGame()
+    {
+        SceneManager.LoadScene(1);
+    }
+    
+    [TargetRpc]
+    public void TargetStartGame()
+    {
+        SceneManager.LoadScene(2, LoadSceneMode.Additive);
+    }
+    
 
     [Command]
     public void CmdAddPlayerToList()

@@ -10,16 +10,44 @@ public class LobbyManager : NetworkBehaviour
     public SyncListGameObject KnownPlayers = new SyncListGameObject();
     public SyncListGameObject UnknownPlayers = new SyncListGameObject();
 
-    [SerializeField] private DevicesListController devicesListController;
     
+    
+    [SerializeField] private DevicesListController devicesListController;
+
     public static LobbyManager Instance;
+
     // Start is called before the first frame update
     void Start()
     {
+#if DEVELOPMENT_BUILD
+
+        this.KnownPlayers = generateKnownPlayers(5);
+
+#endif
+
         Instance = this;
     }
 
-    // Update is called once per frame
+
+    #if DEVELOPMENT_BUILD
+    private SyncListGameObject generateKnownPlayers(int numberOfPlayers)
+    {
+        SyncListGameObject toRet = new SyncListGameObject();
+        
+        for (int i = 0; i < numberOfPlayers; i++)
+        {
+
+            GameObject goPl = Instantiate(UISessionEditWindow.Instance.playerPrefab);
+            EmptyPlayer pl = goPl.GetComponent<EmptyPlayer>();
+            
+            pl.SetFields(i, i, "Mock", Status.InLobby);
+        }
+
+        return toRet;
+    }
+    #endif
+
+// Update is called once per frame
     void Update()
     {
         
