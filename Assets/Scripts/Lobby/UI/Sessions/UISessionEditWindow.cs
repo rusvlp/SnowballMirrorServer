@@ -23,6 +23,7 @@ public class UISessionEditWindow : MonoBehaviour
     //DEVELOPMENT_BUILD
     public GameObject playerPrefab;
     
+    [SerializeField]
     private Match _match;
     public List<UIEditMatchPlayer> UiPlayersToMoveToSession = new List<UIEditMatchPlayer>();
     public List<UIEditMatchPlayer> UiPlayersToMoveToGlobal = new List<UIEditMatchPlayer>();
@@ -83,7 +84,7 @@ public class UISessionEditWindow : MonoBehaviour
         foreach (GameObject epGo in _match.Players)
         {
             EmptyPlayer ep = epGo.GetComponent<EmptyPlayer>();
-
+            
             GameObject pl = Instantiate(editMatchPlayerPrefab, playersInSessionParent);
             UIEditMatchPlayer uiPl = pl.GetComponent<UIEditMatchPlayer>();
             uiPl.Player = ep;
@@ -138,11 +139,12 @@ public class UISessionEditWindow : MonoBehaviour
 
         foreach (UIEditMatchPlayer uiPl in UiPlayersGlobal)
         {
-            uiPl.Player.PlayerStatus = Status.InLobby;
+            
             uiPl.ResetBackgroundColor();
             if (_match.Players.Contains(uiPl.Player.gameObject))
             {
                 _match.RemovePlayerFromMatch(uiPl.Player);
+                print($"Player with index {uiPl.Player.PlayerGlobalIndex} was removed from match {_match.MatchID}");
             }
             
            

@@ -27,9 +27,11 @@ public class Match : NetworkBehaviour
     {
         this.Status = MatchStatus.Running;
 
+        
         foreach (GameObject epGo in Players)
         {
             EmptyPlayer ep = epGo.GetComponent<EmptyPlayer>();
+            print(ep.Name);
             ep.StartGame();
             ep.PlayerStatus = global::Status.InGame;
         }
@@ -54,18 +56,29 @@ public class Match : NetworkBehaviour
     {
         if (Players.Contains(ep.gameObject))
         {
+            print($"{MatchID} contains player {ep.PlayerGlobalIndex}");
             Players.Remove(ep.gameObject);
-
+            
+            
             if (ep.PlayerStatus == global::Status.InGame && Status == MatchStatus.Running)
             {
                 ep.StopGame();
                 ep.PlayerStatus = global::Status.InLobby;
+                print($"{ep.PlayerMatchIndex} removing from session");
             }
         }
     }
 
     public void StopMatch()
     {
+        foreach (GameObject epGo in Players)
+        {
+            EmptyPlayer ep = epGo.GetComponent<EmptyPlayer>();
+            ep.PlayerStatus = global::Status.InMatch;
+            ep.StopGame();
+        }
+        
+        
         this.Status = MatchStatus.Ready;
         print($"Match {MatchID} is stopped");
     }
