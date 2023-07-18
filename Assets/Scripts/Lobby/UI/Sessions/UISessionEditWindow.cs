@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ public class UISessionEditWindow : MonoBehaviour
     [SerializeField] private Color inSessionColor;
     [SerializeField] private TMP_Text StartStopButton_tmp;
     
+    
     //DEVELOPMENT_BUILD
     public GameObject playerPrefab;
     
@@ -35,6 +37,9 @@ public class UISessionEditWindow : MonoBehaviour
     private int currentPlayersInSession = 0;
 
     public static UISessionEditWindow Instance;
+    
+    
+
     public Match Session
     {
         get => _match;
@@ -174,6 +179,7 @@ public class UISessionEditWindow : MonoBehaviour
             // Запускаем матч
             StartStopButton_tmp.text = "Остановить";
             _match.StartMatch();
+            
            
         }
         else

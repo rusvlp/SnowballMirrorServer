@@ -50,7 +50,7 @@ public class EmptyPlayer : NetworkBehaviour
 
     public void StopGame()
     {
-        print("Exiting...");
+        
         TargetStopGame();
     }
 
@@ -58,12 +58,14 @@ public class EmptyPlayer : NetworkBehaviour
     [TargetRpc]
     public void TargetStopGame()
     {
+        print("Exiting game...");
         SceneManager.LoadScene(1);
     }
     
     [TargetRpc]
     public void TargetStartGame()
     {
+        print("Starting game...");
         SceneManager.LoadScene(2, LoadSceneMode.Additive);
     }
     

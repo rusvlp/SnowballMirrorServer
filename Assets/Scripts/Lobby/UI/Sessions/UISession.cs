@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -20,6 +21,35 @@ public class UISession : MonoBehaviour
         Status = MatchStatus.Ready,
         Name = "Mock"
     };
+
+
+    private void OnEnable()
+    {
+        Match.OnStatusChanged += matchStatusChangingHandler;
+    }
+
+    private void OnDisable()
+    {
+        Match.OnStatusChanged -= matchStatusChangingHandler;
+    }
+
+    private void matchStatusChangingHandler(string matchId, MatchStatus status)
+    {
+        if (_match.MatchID == matchId)
+        {
+            statusTmp.text = status.ToString();
+        }
+    }
+    
+    
+    public MatchStatus SetUiStatus
+    {
+        get => _match.Status;
+        set
+        {
+            statusTmp.text = value.ToString();
+        }
+    }
     
     public Match MatchSession
     {

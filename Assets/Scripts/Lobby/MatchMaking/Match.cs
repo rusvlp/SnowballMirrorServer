@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,8 @@ public class Match : NetworkBehaviour
 
     [SyncVar] public MatchStatus Status;
 
-
+    public static Action<string, MatchStatus> OnStatusChanged;
+    
     public Match(string matchID, GameObject playerHost)
     {
         // print("Match ctor is called " + this);
@@ -37,6 +39,8 @@ public class Match : NetworkBehaviour
         }
 
         print($"Match {MatchID} is started");
+        
+        OnStatusChanged?.Invoke(MatchID, MatchStatus.Running);
     }
 
     public void AddPlayerToMatch(EmptyPlayer ep)
@@ -81,6 +85,7 @@ public class Match : NetworkBehaviour
         
         this.Status = MatchStatus.Ready;
         print($"Match {MatchID} is stopped");
+        OnStatusChanged?.Invoke(MatchID, MatchStatus.Ready);
     }
     
     public Match()

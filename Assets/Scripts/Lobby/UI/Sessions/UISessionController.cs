@@ -17,6 +17,8 @@ public class UISessionController : MonoBehaviour
     [SerializeField] private Transform parent;
 
     [SerializeField] private GameObject editSessionWindow;
+
+    private List<UISession> sessions = new ();
     
     public static UISessionController Instance;
 
@@ -34,6 +36,24 @@ public class UISessionController : MonoBehaviour
         
     }
 
+    /*
+    private void OnEnable()
+    {
+        Match.OnStatusChanged += MatchStatusChangingHandler;
+    }
+
+    private void OnDisable()
+    {
+        Match.OnStatusChanged -= MatchStatusChangingHandler;
+    }
+
+    public void MatchStatusChangingHandler(string matchId, MatchStatus status)
+    {
+        UISession session = sessions
+            .Find(s => s.MatchSession.MatchID == matchId);
+    }
+    */
+    
     public void OpenCloseCreateSessionWindow()
     {
         if (createSessionWindow.activeSelf)
@@ -58,6 +78,7 @@ public class UISessionController : MonoBehaviour
         {
             UISession uiSession = Instantiate(uiSessionPrefab, parent).GetComponent<UISession>();
             uiSession.MatchSession = match;
+            sessions.Add(uiSession);
             OpenCloseCreateSessionWindow();
         }
         else
