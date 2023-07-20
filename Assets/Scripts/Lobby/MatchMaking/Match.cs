@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using Mirror.Examples.CCU;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Match : NetworkBehaviour
@@ -16,7 +17,51 @@ public class Match : NetworkBehaviour
 
     [SyncVar] public MatchStatus Status;
 
+    [SerializeField] private List<GameObject> playersInGame = new();
+
+    private bool isOtherPlayersSpawned = false;
+    private bool isMatchStarted = false;
     public static Action<string, MatchStatus> OnStatusChanged;
+
+    private void OnEnable()
+    {
+        EmptyPlayer.OnPlayerCreated += RegisterPlayerObjectHandler;
+    }
+
+    private void OnDestroy()
+    {
+        EmptyPlayer.OnPlayerCreated -= RegisterPlayerObjectHandler;
+    }
+
+    public void RegisterPlayerObjectHandler(GameObject player)
+    {
+        this.playersInGame.Add(player);
+    }
+
+
+    private void Update()
+    {
+        
+        if (Players.Count == playersInGame.Count && !isOtherPlayersSpawned && isMatchStarted)
+        {
+            print(Players.Count + " " + playersInGame.Count);
+            print("Calling SpawnPlayerGameObjectsInMatch");
+            SpawnPlayerGameObjectsInMatch();
+            isOtherPlayersSpawned = true;
+        }
+    }
+
+    private void SpawnPlayerGameObjectsInMatch()
+    {
+
+        foreach (GameObject epGo in Players)
+        {
+            EmptyPlayer ep = epGo.GetComponent<EmptyPlayer>();
+            ep.SpawnOtherPlayers(playersInGame);
+        }
+        
+        
+    }
     
     public Match(string matchID, GameObject playerHost)
     {
@@ -29,6 +74,7 @@ public class Match : NetworkBehaviour
     {
         this.Status = MatchStatus.Running;
 
+       
         
         foreach (GameObject epGo in Players)
         {
@@ -36,8 +82,11 @@ public class Match : NetworkBehaviour
             print(ep.Name);
             ep.StartGame();
             ep.PlayerStatus = global::Status.InGame;
+           
+          
         }
 
+        isMatchStarted = true;
         print($"Match {MatchID} is started");
         
         OnStatusChanged?.Invoke(MatchID, MatchStatus.Running);
@@ -52,6 +101,9 @@ public class Match : NetworkBehaviour
             {
                 ep.StartGame();
                 ep.PlayerStatus = global::Status.InGame;
+                ep.GetComponent<NetworkMatch>().matchId = GetComponent<NetworkMatch>().matchId;
+                ep.GuidMatchId = GetComponent<NetworkMatch>().matchId;
+                
             }
         }
     }
@@ -69,6 +121,8 @@ public class Match : NetworkBehaviour
                 ep.StopGame();
                 ep.PlayerStatus = global::Status.InLobby;
                 print($"{ep.PlayerMatchIndex} removing from session");
+                ep.GetComponent<NetworkMatch>().matchId = Guid.Empty;
+                ep.GuidMatchId = Guid.Empty;
             }
         }
     }
@@ -99,11 +153,7 @@ public class Match : NetworkBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   
 }
 
 

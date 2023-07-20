@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -13,10 +15,16 @@ public class EmptyPlayer : NetworkBehaviour
     public string Fingerprint;
     public string Name;
     public Status PlayerStatus = Status.InLobby;
+    public Guid GuidMatchId;
+
+    public GameObject PlayerInGame;
+    
+    public static Action<Guid> OnGameStarted;
+    public static Action<GameObject> OnPlayerCreated;
     
     public static EmptyPlayer LocalPlayer;
 
-    #if DEVELOPMENT_BUILD
+#if DEVELOPMENT_BUILD
     public void SetFields(int playerGlobalIndex, int playerMatchIndex, string fingerprint, Status playerStatus)
     {
         this.PlayerGlobalIndex = playerGlobalIndex;
@@ -24,8 +32,8 @@ public class EmptyPlayer : NetworkBehaviour
         this.Fingerprint = fingerprint;
         this.PlayerStatus = playerStatus;
     }
-    #endif
-    
+#endif
+
     void Start()
     {
         print("Player initialized");
@@ -40,7 +48,7 @@ public class EmptyPlayer : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void StartGame()
@@ -50,7 +58,7 @@ public class EmptyPlayer : NetworkBehaviour
 
     public void StopGame()
     {
-        
+
         TargetStopGame();
     }
 
@@ -61,15 +69,77 @@ public class EmptyPlayer : NetworkBehaviour
         print("Exiting game...");
         SceneManager.LoadScene(1);
     }
-    
+
     [TargetRpc]
     public void TargetStartGame()
     {
         print("Starting game...");
         SceneManager.LoadScene(2, LoadSceneMode.Additive);
+        OnGameStarted?.Invoke(GuidMatchId);
+        CmdStartGame();
+    }
+
+    [Command]
+    public void CmdStartGame()
+    {
+        print("Cmd Start Game is called");
+        SpawnPlayerPrefab();
+    }
+
+
+    [Server]
+    public void SpawnPlayerPrefab()
+    {
+        print("Spawn player prefab is called");
+        Vector3 position = new Vector3(0, 2, 0);
+        Quaternion rotation = new Quaternion(0, 0, 0, 0);
+        
+        GameObject playerPrefab = CustomNetworkManager.Instance.spawnPrefabs[0];
+        
+        print("Registering in game player object");
+        this.PlayerInGame = Instantiate(playerPrefab, position, rotation);
+        print($"Registered. {PlayerInGame}");
+        PlayerInGame.GetComponent<NetworkMatch>().matchId = GuidMatchId;
+        
+        RegisterPlayerObject(PlayerInGame);
+        
+        NetworkServer.Spawn(PlayerInGame, connectionToClient);
+    }
+
+    [Server]
+    public void RegisterPlayerObject(GameObject playerObject)
+    {
+        OnPlayerCreated?.Invoke(playerObject);
     }
     
+  
+    [Server]
+    public void SpawnOtherPlayers(List<GameObject> otherPlayers)
+    {
 
+        print("Spawn other players method is called");
+        
+        foreach (GameObject go in otherPlayers)
+        {
+            if (go == this.PlayerInGame)
+            {
+                continue;
+            }
+            
+            print($"Spawning {go}");
+            
+            RpcSpawnOnClient(go);
+            NetworkServer.Spawn(go, connectionToClient);
+        }
+    }
+
+    [TargetRpc]
+    public void RpcSpawnOnClient(GameObject player)
+    {
+        print($"Spawning {player}");
+       // Instantiate(player);
+    }
+    
     [Command]
     public void CmdAddPlayerToList()
     {
