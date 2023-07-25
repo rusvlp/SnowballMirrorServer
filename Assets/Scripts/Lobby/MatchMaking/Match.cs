@@ -46,7 +46,7 @@ public class Match : NetworkBehaviour
         {
             print(Players.Count + " " + playersInGame.Count);
             print("Calling SpawnPlayerGameObjectsInMatch");
-            SpawnPlayerGameObjectsInMatch();
+        //    SpawnPlayerGameObjectsInMatch();
             isOtherPlayersSpawned = true;
         }
     }
@@ -80,6 +80,9 @@ public class Match : NetworkBehaviour
         {
             EmptyPlayer ep = epGo.GetComponent<EmptyPlayer>();
             print(ep.Name);
+            ep.GetComponent<NetworkMatch>().matchId = GetComponent<NetworkMatch>().matchId;
+            ep.GuidMatchId = GetComponent<NetworkMatch>().matchId;
+            
             ep.StartGame();
             ep.PlayerStatus = global::Status.InGame;
            
@@ -99,11 +102,11 @@ public class Match : NetworkBehaviour
             Players.Add(ep.gameObject);
             if (ep.PlayerStatus != global::Status.InGame && Status == MatchStatus.Running)
             {
-                ep.StartGame();
+                
                 ep.PlayerStatus = global::Status.InGame;
                 ep.GetComponent<NetworkMatch>().matchId = GetComponent<NetworkMatch>().matchId;
                 ep.GuidMatchId = GetComponent<NetworkMatch>().matchId;
-                
+                ep.StartGame();
             }
         }
     }

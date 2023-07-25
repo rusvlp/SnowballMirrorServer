@@ -99,5 +99,7 @@ public class UISessionController : MonoBehaviour
     public void CloseEditMatchWindow()
     {
         editSessionWindow.SetActive(false);
+        UISessionEditWindow editWindow = editSessionWindow.GetComponent<UISessionEditWindow>();
+        editWindow.Close();
     }
 }

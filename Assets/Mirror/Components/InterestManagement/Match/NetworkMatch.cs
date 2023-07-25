@@ -9,7 +9,25 @@ namespace Mirror
     [HelpURL("https://mirror-networking.gitbook.io/docs/guides/interest-management")]
     public class NetworkMatch : NetworkBehaviour
     {
+        [SerializeField]
         ///<summary>Set this to the same value on all networked objects that belong to a given match</summary>
-        public Guid matchId;
+
+        private Guid _matchId;
+
+        public Guid matchId
+        {
+            get => _matchId;
+            set
+            {
+                _matchId = value;
+                MatchIDGuidString = value.ToString();
+            }
+        }
+
+
+
+
+        public string MatchIDGuidString;
+
     }
 }

@@ -10,13 +10,24 @@ using UnityEngine.Serialization;
 public class EmptyPlayer : NetworkBehaviour
 {
 
+    [SyncVar]
     public int PlayerGlobalIndex;
+    
+    [SyncVar]
     public int PlayerMatchIndex;
+    
+    [SyncVar]
     public string Fingerprint;
+    
+    [SyncVar]
     public string Name;
+    
+    [SyncVar]
     public Status PlayerStatus = Status.InLobby;
+    
+    [SyncVar]
     public Guid GuidMatchId;
-
+    
     public GameObject PlayerInGame;
     
     public static Action<Guid> OnGameStarted;
@@ -104,8 +115,18 @@ public class EmptyPlayer : NetworkBehaviour
         RegisterPlayerObject(PlayerInGame);
         
         NetworkServer.Spawn(PlayerInGame, connectionToClient);
+        TargetMoveToGameScene();
     }
 
+    
+   
+
+    [TargetRpc]
+    public void TargetMoveToGameScene()
+    {
+        print(SceneManager.GetSceneByBuildIndex(2));
+    }
+    
     [Server]
     public void RegisterPlayerObject(GameObject playerObject)
     {

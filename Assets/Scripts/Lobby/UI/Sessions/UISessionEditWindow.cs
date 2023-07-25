@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using Lobby.MatchMaking;
 using Mirror.Examples.CCU;
 using TMPro;
@@ -100,7 +101,25 @@ public class UISessionEditWindow : MonoBehaviour
         
     }
 
-    
+    public void Close()
+    {
+        UiPlayersToMoveToSession = new List<UIEditMatchPlayer>();
+        UiPlayersToMoveToGlobal = new List<UIEditMatchPlayer>();
+
+        foreach (UIEditMatchPlayer pl in UiPlayersGlobal)
+        {
+            Destroy(pl.gameObject);
+        }
+
+        foreach (UIEditMatchPlayer pl in UiPlayersInSession)
+        {
+            Destroy(pl.gameObject);
+        }
+
+        UiPlayersGlobal = new List<UIEditMatchPlayer>();
+        UiPlayersInSession = new List<UIEditMatchPlayer>();
+    }
+
     
     public void MoveToSession()
     {
@@ -172,6 +191,7 @@ public class UISessionEditWindow : MonoBehaviour
         
     }
 
+   
     public void StartStopMatch()
     {
         if (_match.Status == MatchStatus.Ready)
