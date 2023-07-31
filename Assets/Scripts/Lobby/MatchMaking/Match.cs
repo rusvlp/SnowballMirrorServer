@@ -6,6 +6,7 @@ using Mirror;
 using Mirror.Examples.CCU;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Match : NetworkBehaviour
 {
@@ -17,9 +18,12 @@ public class Match : NetworkBehaviour
 
     [SyncVar] public MatchStatus Status;
 
+    [SyncVar] public Scene GameScene; 
+
+
     [SerializeField] private List<GameObject> playersInGame = new();
 
-    private bool isOtherPlayersSpawned = false;
+    //private bool isOtherPlayersSpawned = false;
     private bool isMatchStarted = false;
     public static Action<string, MatchStatus> OnStatusChanged;
 
@@ -41,7 +45,7 @@ public class Match : NetworkBehaviour
 
     private void Update()
     {
-        
+      /*  
         if (Players.Count == playersInGame.Count && !isOtherPlayersSpawned && isMatchStarted)
         {
             print(Players.Count + " " + playersInGame.Count);
@@ -49,6 +53,8 @@ public class Match : NetworkBehaviour
         //    SpawnPlayerGameObjectsInMatch();
             isOtherPlayersSpawned = true;
         }
+        
+        */
     }
 
     private void SpawnPlayerGameObjectsInMatch()
@@ -80,7 +86,7 @@ public class Match : NetworkBehaviour
         {
             EmptyPlayer ep = epGo.GetComponent<EmptyPlayer>();
             print(ep.Name);
-            ep.GetComponent<NetworkMatch>().matchId = GetComponent<NetworkMatch>().matchId;
+            //ep.GetComponent<NetworkMatch>().matchId = GetComponent<NetworkMatch>().matchId;
             ep.GuidMatchId = GetComponent<NetworkMatch>().matchId;
             
             ep.StartGame();
@@ -161,8 +167,6 @@ public class Match : NetworkBehaviour
 
 
 
-[System.Serializable]
-public class SyncListMatches : SyncList<Match>{}
 
 public enum MatchStatus
 {

@@ -98,7 +98,15 @@ public class UISessionEditWindow : MonoBehaviour
             uiPl.ChangeBackgroundColor(this.inSessionColor);
             UiPlayersInSession.Add(uiPl);
         }
-        
+
+
+        if (_match.Status == MatchStatus.Running)
+        {
+            StartStopButton_tmp.text = "Остановить";
+        } else if (_match.Status == MatchStatus.Ready)
+        {
+            StartStopButton_tmp.text = "Запустить";
+        }
     }
 
     public void Close()
@@ -198,7 +206,7 @@ public class UISessionEditWindow : MonoBehaviour
         {
             // Запускаем матч
             StartStopButton_tmp.text = "Остановить";
-            _match.StartMatch();
+            MatchMaker.Instance.StartMatch(_match);
             
            
         }

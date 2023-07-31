@@ -3,19 +3,24 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class TurnManager : NetworkBehaviour
+public class ECustomNetworkManager : NetworkManager
 {
-    public SyncListGameObject Players;
-    
     // Start is called before the first frame update
     void Start()
     {
-        
+            
     }
 
+    public override void OnStartClient()
+    {
+        
+    }
+    
     // Update is called once per frame
     void Update()
     {
         
     }
+    
+    
 }

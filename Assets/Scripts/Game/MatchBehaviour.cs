@@ -13,13 +13,14 @@ public class MatchBehaviour : NetworkBehaviour
     }
 
     private void OnEnable()
-    {
-        EmptyPlayer.OnGameStarted += SetGuidMatchId;
+    { 
+      //  EmptyPlayer.OnGameStarted += SetGuidMatchId;
     }
 
     private void OnDisable()
     {
-        EmptyPlayer.OnGameStarted -= SetGuidMatchId;
+        
+      //  EmptyPlayer.OnGameStarted -= SetGuidMatchId;
     }
 
     private void SetGuidMatchId(Guid guidMatchId)

@@ -30,8 +30,11 @@ public class EmptyPlayer : NetworkBehaviour
     
     public GameObject PlayerInGame;
     
-    public static Action<Guid> OnGameStarted;
+    public static Action OnGameStarted;
     public static Action<GameObject> OnPlayerCreated;
+
+    [SyncVar]
+    public Scene SceneForPlayer;
     
     public static EmptyPlayer LocalPlayer;
 
@@ -85,47 +88,77 @@ public class EmptyPlayer : NetworkBehaviour
     public void TargetStartGame()
     {
         print("Starting game...");
-        SceneManager.LoadScene(2, LoadSceneMode.Additive);
-        OnGameStarted?.Invoke(GuidMatchId);
+       // SceneManager.LoadScene(2, LoadSceneMode.Additive);
+        OnGameStarted?.Invoke();
         CmdStartGame();
     }
 
+
+    
+    
     [Command]
     public void CmdStartGame()
     {
         print("Cmd Start Game is called");
         SpawnPlayerPrefab();
     }
+    
+    public IEnumerator StartGameRoutine()
+    {
+        // Wait until GameScene is loaded
+        
+        //yield return SceneManager.LoadSceneAsync(CustomNetworkManager.Instance.GameScene, LoadSceneMode.Additive);
+
+        
+        // idk why i added this, just want to be sure that client is ready
+        yield return new WaitUntil(() => connectionToClient.isReady);
+        
+        connectionToClient.Send(new SceneMessage
+        {
+            sceneName = CustomNetworkManager.Instance.GameScene,
+            sceneOperation = SceneOperation.LoadAdditive
+        });
+        
+        
+        
+        yield return new WaitForEndOfFrame();
+        
+     
+    }
 
 
+   
+    
     [Server]
     public void SpawnPlayerPrefab()
     {
+        //RpcPrepareToSpawnSceneObjects();
+        
         print("Spawn player prefab is called");
         Vector3 position = new Vector3(0, 2, 0);
         Quaternion rotation = new Quaternion(0, 0, 0, 0);
         
         GameObject playerPrefab = CustomNetworkManager.Instance.spawnPrefabs[0];
         
-        print("Registering in game player object");
         this.PlayerInGame = Instantiate(playerPrefab, position, rotation);
-        print($"Registered. {PlayerInGame}");
-        PlayerInGame.GetComponent<NetworkMatch>().matchId = GuidMatchId;
         
-        RegisterPlayerObject(PlayerInGame);
+        
+
+        
         
         NetworkServer.Spawn(PlayerInGame, connectionToClient);
-        TargetMoveToGameScene();
+        SceneManager.MoveGameObjectToScene(this.PlayerInGame, SceneForPlayer);
+        StartCoroutine(StartGameRoutine());
+        
     }
 
     
-   
-
     [TargetRpc]
-    public void TargetMoveToGameScene()
+    public void RpcPrepareToSpawnSceneObjects()
     {
-        print(SceneManager.GetSceneByBuildIndex(2));
+        NetworkClient.PrepareToSpawnSceneObjects();
     }
+
     
     [Server]
     public void RegisterPlayerObject(GameObject playerObject)

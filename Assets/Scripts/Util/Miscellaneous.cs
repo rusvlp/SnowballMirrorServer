@@ -5,10 +5,11 @@ using System.Security.Cryptography;
 using System.Text;
 using Mirror;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Lobby.MatchMaking
 {
-    public static class Extensions
+    public static class Miscellaneous
     {
         public static Guid toGuid(this string id)
         {
@@ -36,3 +37,17 @@ namespace Lobby.MatchMaking
     }
     
 }
+
+[System.Serializable]
+public class SyncListString : SyncList<string>{}
+
+[Serializable]
+public class SyncListGameObject : SyncList<GameObject>{}
+
+
+[System.Serializable]
+public class SyncListMatches : SyncList<Match>{}
+
+
+[System.Serializable]
+public class SyncListScenes : SyncList<Scene> {};

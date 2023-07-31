@@ -80,5 +80,3 @@ public class LobbyManager : NetworkBehaviour
     
 }
 
-[Serializable]
-public class SyncListGameObject : SyncList<GameObject>{}
