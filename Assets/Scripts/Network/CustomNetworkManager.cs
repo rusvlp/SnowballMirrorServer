@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CustomNetworkManager : NetworkManager
@@ -26,8 +28,28 @@ public class CustomNetworkManager : NetworkManager
         
     }
 
-   // public override void OnStartServer() => spawnPrefabs = Resources.LoadAll<GameObject>("SpawnablePrefabs").ToList();
+    public static Action<NetworkConnectionToClient, GameManager.SceneLoadedMessage> OnSceneLoaded;
 
+
+    public override void OnStartServer()
+    {
+        
+        NetworkServer.RegisterHandler<GameManager.SceneLoadedMessage>(SceneLoaded);
+        
+        // spawnPrefabs = Resources.LoadAll<GameObject>("SpawnablePrefabs").ToList();
+    }
+
+    public void SceneLoaded(NetworkConnectionToClient conn, GameManager.SceneLoadedMessage msg)
+    {
+        OnSceneLoaded?.Invoke(conn, msg);
+    }
+
+    public void SendSceneLoadedMessage(GameManager.SceneLoadedMessage msg)
+    {
+        
+      
+    }
+    
     public override void OnStartClient()
     {
         /*

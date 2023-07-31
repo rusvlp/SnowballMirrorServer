@@ -27,6 +27,9 @@ public class EmptyPlayer : NetworkBehaviour
     
     [SyncVar]
     public Guid GuidMatchId;
+
+    [SyncVar] public bool isClientSceneLoaded;
+    
     
     public GameObject PlayerInGame;
     
@@ -65,6 +68,24 @@ public class EmptyPlayer : NetworkBehaviour
 
     }
 
+    private void OnEnable()
+    {
+        CustomNetworkManager.OnSceneLoaded += SceneLoadedHandler;
+    }
+
+    private void OnDisable()
+    {
+        
+    }
+
+    public void SceneLoadedHandler(NetworkConnectionToClient conn, GameManager.SceneLoadedMessage msg)
+    {
+        if (this.connectionToClient == conn)
+        {
+            this.isClientSceneLoaded = msg.isLoaded;
+        }
+    }
+    
     public void StartGame()
     {
         TargetStartGame();
@@ -100,10 +121,10 @@ public class EmptyPlayer : NetworkBehaviour
     public void CmdStartGame()
     {
         print("Cmd Start Game is called");
-        SpawnPlayerPrefab();
+        StartCoroutine(LoadSceneRoutine());
     }
     
-    public IEnumerator StartGameRoutine()
+    public IEnumerator LoadSceneRoutine()
     {
         // Wait until GameScene is loaded
         
@@ -122,36 +143,45 @@ public class EmptyPlayer : NetworkBehaviour
         
         
         yield return new WaitForEndOfFrame();
-        
-     
+
+        StartCoroutine(SpawnPlayerPrefabRoutine());
     }
 
 
    
     
     [Server]
-    public void SpawnPlayerPrefab()
+    public IEnumerator SpawnPlayerPrefabRoutine()
     {
         //RpcPrepareToSpawnSceneObjects();
         
         print("Spawn player prefab is called");
-        Vector3 position = new Vector3(0, 2, 0);
+        Vector3 position = new Vector3(0, 0, 0);
         Quaternion rotation = new Quaternion(0, 0, 0, 0);
         
         GameObject playerPrefab = CustomNetworkManager.Instance.spawnPrefabs[0];
+
+       
+        print("Server received information, that client has loaded scene");
         
         this.PlayerInGame = Instantiate(playerPrefab, position, rotation);
-        
-        
 
-        
-        
         NetworkServer.Spawn(PlayerInGame, connectionToClient);
+        yield return new WaitForEndOfFrame();
         SceneManager.MoveGameObjectToScene(this.PlayerInGame, SceneForPlayer);
-        StartCoroutine(StartGameRoutine());
         
+    
+
+        TargetPrint("Player spawned");
+        yield break;
+
     }
 
+    [TargetRpc]
+    public void TargetPrint(string msg)
+    {
+        print(msg);
+    }
     
     [TargetRpc]
     public void RpcPrepareToSpawnSceneObjects()
