@@ -11,10 +11,16 @@ public class InputManager : NetworkBehaviour
     // Start is called before the first frame update
 
     public static InputManager Instance;
+
+    void Awake()
+    {
+        Instance = this;
+    }
+    
     
     void Start()
     {
-        Instance = this;
+      
         
         
     }

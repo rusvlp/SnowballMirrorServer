@@ -16,8 +16,11 @@ public class InGamePlayer : NetworkBehaviour
     {
         this._rigidbody = GetComponent<Rigidbody>();
 
-        if (isClient && EmptyPlayer.LocalPlayer.isLocalPlayer)
+        
+        
+        if (isClient && isOwned)
         {
+            print(isOwned);
             InputManager.Instance.InGamePlayer = this;
         }
 
