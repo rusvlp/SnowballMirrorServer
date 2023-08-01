@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
@@ -10,6 +11,8 @@ public class InGamePlayer : NetworkBehaviour
     [SerializeField] private Rigidbody _rigidbody;
 
     [SyncVar] [SerializeField] private float _speed;
+
+    public static Action CmdMovePlayerCalled;
     
     // Start is called before the first frame update
     void Start()
@@ -26,7 +29,7 @@ public class InGamePlayer : NetworkBehaviour
 
         if (isServer)
         {
-            _speed = 3;
+            _speed = 5;
         } 
     }
 
@@ -40,7 +43,13 @@ public class InGamePlayer : NetworkBehaviour
     [Command]
     public void CmdMovePlayer(Vector3 movementVector)
     {
-        print("Command to move is received");
+        print($"$Command to move is received, connection {this.connectionToClient}");
+        _rigidbody.AddForce(movementVector.normalized * _speed);
+        CmdMovePlayerCalled?.Invoke();
+    }
+
+    public void MovePlayer(Vector3 movementVector)
+    {
         _rigidbody.AddForce(movementVector.normalized * _speed);
     }
 

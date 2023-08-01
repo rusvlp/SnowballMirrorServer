@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
@@ -10,6 +11,8 @@ public class InputManager : NetworkBehaviour
     [SerializeField] private Vector3 _movementVector;
     // Start is called before the first frame update
 
+    public static Action MoveInputCalled;
+    
     public static InputManager Instance;
 
     void Awake()
@@ -46,8 +49,11 @@ public class InputManager : NetworkBehaviour
         {
             print(actualVector3);
             _movementVector = actualVector3;
+            InGamePlayer.CmdMovePlayer(this._movementVector);
+            InGamePlayer.MovePlayer(this._movementVector);
+            MoveInputCalled?.Invoke();
         }
         
-        InGamePlayer.CmdMovePlayer(this._movementVector);
+       
     }
 }
