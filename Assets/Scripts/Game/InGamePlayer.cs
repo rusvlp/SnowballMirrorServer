@@ -40,6 +40,7 @@ public class InGamePlayer : NetworkBehaviour
     [Command]
     public void CmdMovePlayer(Vector3 movementVector)
     {
+        print("Command to move is received");
         _rigidbody.AddForce(movementVector.normalized * _speed);
     }
 
