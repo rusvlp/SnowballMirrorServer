@@ -10,13 +10,12 @@ using UnityEngine.Serialization;
 public class EmptyPlayer : NetworkBehaviour
 {
 
-    [SyncVar]
+
     public int PlayerGlobalIndex;
     
     [SyncVar]
     public int PlayerMatchIndex;
-    
-    [SyncVar]
+
     public string Fingerprint;
     
     [SyncVar]
@@ -25,8 +24,7 @@ public class EmptyPlayer : NetworkBehaviour
     [SyncVar]
     public Status PlayerStatus = Status.InLobby;
     
-    [SyncVar]
-    public Guid GuidMatchId;
+ 
 
     [SyncVar] public bool isClientSceneLoaded;
     

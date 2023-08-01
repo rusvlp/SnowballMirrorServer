@@ -76,30 +76,7 @@ public class Match : NetworkBehaviour
         this.Players.Add(playerHost);
     }
 
-    public void StartMatch()
-    {
-        this.Status = MatchStatus.Running;
-
-       
-        
-        foreach (GameObject epGo in Players)
-        {
-            EmptyPlayer ep = epGo.GetComponent<EmptyPlayer>();
-            print(ep.Name);
-            //ep.GetComponent<NetworkMatch>().matchId = GetComponent<NetworkMatch>().matchId;
-            ep.GuidMatchId = GetComponent<NetworkMatch>().matchId;
-            
-            ep.StartGame();
-            ep.PlayerStatus = global::Status.InGame;
-           
-          
-        }
-
-        isMatchStarted = true;
-        print($"Match {MatchID} is started");
-        
-        OnStatusChanged?.Invoke(MatchID, MatchStatus.Running);
-    }
+  
 
     public void AddPlayerToMatch(EmptyPlayer ep)
     {
@@ -111,7 +88,7 @@ public class Match : NetworkBehaviour
                 
                 ep.PlayerStatus = global::Status.InGame;
                 ep.GetComponent<NetworkMatch>().matchId = GetComponent<NetworkMatch>().matchId;
-                ep.GuidMatchId = GetComponent<NetworkMatch>().matchId;
+              
                 ep.StartGame();
             }
         }
@@ -131,7 +108,7 @@ public class Match : NetworkBehaviour
                 ep.PlayerStatus = global::Status.InLobby;
                 print($"{ep.PlayerMatchIndex} removing from session");
                 ep.GetComponent<NetworkMatch>().matchId = Guid.Empty;
-                ep.GuidMatchId = Guid.Empty;
+             
             }
         }
     }
@@ -162,6 +139,33 @@ public class Match : NetworkBehaviour
         
     }
 
+    
+    /*
+  public void StartMatch()
+  {
+      this.Status = MatchStatus.Running;
+
+     
+      
+      foreach (GameObject epGo in Players)
+      {
+          EmptyPlayer ep = epGo.GetComponent<EmptyPlayer>();
+          print(ep.Name);
+          //ep.GetComponent<NetworkMatch>().matchId = GetComponent<NetworkMatch>().matchId;
+        
+          
+          ep.StartGame();
+          ep.PlayerStatus = global::Status.InGame;
+         
+        
+      }
+
+      isMatchStarted = true;
+      print($"Match {MatchID} is started");
+      
+      OnStatusChanged?.Invoke(MatchID, MatchStatus.Running);
+  }
+  */
    
 }
 
