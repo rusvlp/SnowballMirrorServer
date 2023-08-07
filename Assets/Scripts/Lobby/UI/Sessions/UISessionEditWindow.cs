@@ -206,7 +206,7 @@ public class UISessionEditWindow : MonoBehaviour
         {
             // Запускаем матч
             StartStopButton_tmp.text = "Остановить";
-            MatchMaker.Instance.StartMatch(_match);
+            _match.StartMatch();
             
            
         }

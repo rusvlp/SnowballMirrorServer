@@ -45,29 +45,9 @@ public class Match : NetworkBehaviour
 
     private void Update()
     {
-      /*  
-        if (Players.Count == playersInGame.Count && !isOtherPlayersSpawned && isMatchStarted)
-        {
-            print(Players.Count + " " + playersInGame.Count);
-            print("Calling SpawnPlayerGameObjectsInMatch");
-        //    SpawnPlayerGameObjectsInMatch();
-            isOtherPlayersSpawned = true;
-        }
-        
-        */
+    
     }
-
-    private void SpawnPlayerGameObjectsInMatch()
-    {
-
-        foreach (GameObject epGo in Players)
-        {
-            EmptyPlayer ep = epGo.GetComponent<EmptyPlayer>();
-            ep.SpawnOtherPlayers(playersInGame);
-        }
-        
-        
-    }
+    
     
     public Match(string matchID, GameObject playerHost)
     {
@@ -77,6 +57,34 @@ public class Match : NetworkBehaviour
     }
 
   
+    public void StartMatch()
+    {
+        this.Status = MatchStatus.Running;
+        StartCoroutine(StartMatchRoutine(this));
+    }
+
+
+    private IEnumerator StartMatchRoutine(Match match)
+    {
+        // Wait until scene is loaded on server
+        
+        yield return SceneManager.LoadSceneAsync(CustomNetworkManager.Instance.GameScene, new LoadSceneParameters { loadSceneMode = LoadSceneMode.Additive, localPhysicsMode = LocalPhysicsMode.Physics3D });
+
+        match.GameScene = SceneManager.GetSceneAt(MatchMaker.Instance.LoadedScenes.Count + 1);
+        MatchMaker.Instance.LoadedScenes.Add(match.GameScene);
+        
+        // SceneManager.MoveGameObjectToScene(match.gameObject, match.GameScene);
+        
+        foreach (GameObject epGo in match.Players)
+        {
+            EmptyPlayer ep = epGo.GetComponent<EmptyPlayer>();
+            ep.SceneForPlayer = match.GameScene;
+            ep.StartGame();
+        }
+         
+       
+    }
+    
 
     public void AddPlayerToMatch(EmptyPlayer ep)
     {
@@ -115,17 +123,30 @@ public class Match : NetworkBehaviour
 
     public void StopMatch()
     {
+        StartCoroutine(StopMatchRoutine());
+
+    }
+
+    public IEnumerator StopMatchRoutine()
+    {
         foreach (GameObject epGo in Players)
         {
             EmptyPlayer ep = epGo.GetComponent<EmptyPlayer>();
             ep.PlayerStatus = global::Status.InMatch;
             ep.StopGame();
         }
+
+        this.Status = MatchStatus.Stopping;
+
+        MatchMaker.Instance.LoadedScenes.Remove(GameScene); 
+        
+        yield return SceneManager.UnloadSceneAsync(GameScene);
         
         
         this.Status = MatchStatus.Ready;
         print($"Match {MatchID} is stopped");
         OnStatusChanged?.Invoke(MatchID, MatchStatus.Ready);
+
     }
     
     public Match()
@@ -173,7 +194,9 @@ public class Match : NetworkBehaviour
 
 
 public enum MatchStatus
-{
+{   
+    Starting,
     Running, 
+    Stopping,
     Ready
 }

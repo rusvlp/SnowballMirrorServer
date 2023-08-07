@@ -55,32 +55,9 @@ public class MatchMaker : NetworkBehaviour
     }
 
 
-    public void StartMatch(Match match)
+    private void UnloadMatchScene()
     {
-        match.Status = MatchStatus.Running;
-        StartCoroutine(StartMatchRoutine(match));
-    }
-
-
-    private IEnumerator StartMatchRoutine(Match match)
-    {
-        // Wait until scene is loaded on server
         
-        yield return SceneManager.LoadSceneAsync(CustomNetworkManager.Instance.GameScene, new LoadSceneParameters { loadSceneMode = LoadSceneMode.Additive, localPhysicsMode = LocalPhysicsMode.Physics3D });
-
-        match.GameScene = SceneManager.GetSceneAt(LoadedScenes.Count + 1);
-        LoadedScenes.Add(match.GameScene);
-        
-       // SceneManager.MoveGameObjectToScene(match.gameObject, match.GameScene);
-        
-        foreach (GameObject epGo in match.Players)
-        {
-            EmptyPlayer ep = epGo.GetComponent<EmptyPlayer>();
-            ep.SceneForPlayer = match.GameScene;
-            ep.StartGame();
-        }
-         
-       
     }
 
     public bool AddPlayerToMatch(EmptyPlayer player, string matchId, out int indexInMatch)

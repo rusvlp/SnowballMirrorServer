@@ -89,9 +89,10 @@ public class EmptyPlayer : NetworkBehaviour
         TargetStartGame();
     }
 
+    [Server]
     public void StopGame()
     {
-
+        NetworkServer.Destroy(PlayerInGame);
         TargetStopGame();
     }
 
@@ -100,7 +101,7 @@ public class EmptyPlayer : NetworkBehaviour
     public void TargetStopGame()
     {
         print("Exiting game...");
-        SceneManager.LoadScene(1);
+        SceneManager.UnloadSceneAsync(2);
     }
 
     [TargetRpc]
@@ -112,7 +113,7 @@ public class EmptyPlayer : NetworkBehaviour
         CmdStartGame();
     }
 
-
+    
     
     
     [Command]

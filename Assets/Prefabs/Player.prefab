@@ -194,7 +194,7 @@ MonoBehaviour:
   _speed: 0
   _uiCanvas: {fileID: 0}
   _uiCanvasPrefab: {fileID: 1481220822130530935, guid: e28f80f6b9559784697e39eda3febf73, type: 3}
-  _nameYDistance: 50
+  _nameYDistance: 1.5
   Camera: {fileID: 0}
 --- !u!114 &9007157627735305184
 MonoBehaviour:

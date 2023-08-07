@@ -50,10 +50,12 @@ public class InGamePlayer : NetworkBehaviour
     {
         _uiCanvas.LookAt(Camera);
 
-        _uiCanvas.position = transform.position;
+        Vector3 position = new Vector3(transform.position.x, transform.position.y + _nameYDistance, transform.position.z);
+
+        _uiCanvas.position = position;
     }
 
-    public void InstantiatePlayerName()
+    private void InstantiatePlayerName()
     {
         this._rigidbody = GetComponent<Rigidbody>();
 
@@ -62,11 +64,23 @@ public class InGamePlayer : NetworkBehaviour
 
         _uiCanvas = Instantiate(_uiCanvasPrefab, playerNamePosition, playerNameRotation).transform;
     }
+
+    private void DestroyPlayerName()
+    {
+        Destroy(_uiCanvas.gameObject);
+    }
+
+
+    private void OnDestroy()
+    {
+        DestroyPlayerName();
+    }
     
+
     [Command]
     public void CmdMovePlayer(Vector3 movementVector)
     {
-        print($"$Command to move is received, connection {this.connectionToClient}");
+       // print($"$Command to move is received, connection {this.connectionToClient}");
         _rigidbody.AddForce(movementVector.normalized * _speed);
         CmdMovePlayerCalled?.Invoke();
     }
