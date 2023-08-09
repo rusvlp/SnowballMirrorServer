@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class HeightSettings : MonoBehaviour
@@ -14,6 +15,8 @@ public class HeightSettings : MonoBehaviour
 
     [SerializeField] GXRInputManager _controller;
 
+
+    [SerializeField] private TMP_Text _debugTMP;
     private void Start()
     {
         _controller.OnAButtonPressed.AddListener(SetHeight);
@@ -21,8 +24,12 @@ public class HeightSettings : MonoBehaviour
 
     private void Update()
     {
+        
+        
         _height = _head.position.y - _floor.position.y;
+        _debugTMP.text = $"{_height}\n{_height/_baseHeight}";
         _animator.SetFloat("Height", _height/_baseHeight);
+        SetHeight();
     }
 
     private void SetHeight()
