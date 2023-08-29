@@ -90,11 +90,12 @@
 //}
 
 using App.Scripts.Controllers;
+using Mirror;
 using UnityEngine;
 
 namespace App.Scripts.Weapons
 {
-    public class LaunchSystem : MonoBehaviour
+    public class LaunchSystem : NetworkBehaviour
     {
         [HideInInspector] public bool LaunchPhase;
 
@@ -102,7 +103,7 @@ namespace App.Scripts.Weapons
         [SerializeField] TrajectoryRender _trajRender;
         [SerializeField] GameObject _ballPrefab;
         [SerializeField] Transform _anchor;
-        [SerializeField] GXRInputManager _inputs;
+        public GXRInputManager Inputs;
         [SerializeField] RubberRenderer _leftRubber;
         [SerializeField] RubberRenderer _rightRubber;
 
@@ -133,7 +134,7 @@ namespace App.Scripts.Weapons
             }
             else _trajRender.ShowLine();
 
-            if (_inputs.RightHand.GripPressed)
+            if (Inputs.RightHand.GripPressed)
             {
                 if (_handCheck.IsInCollider)
                 {

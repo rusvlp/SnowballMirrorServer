@@ -158,7 +158,7 @@ public class EmptyPlayer : NetworkBehaviour
         Vector3 position = new Vector3(0, 0, 0);
         Quaternion rotation = new Quaternion(0, 0, 0, 0);
         
-        GameObject playerPrefab = CustomNetworkManager.Instance.spawnPrefabs[0];
+        GameObject playerPrefab = CustomNetworkManager.Instance.spawnPrefabs[1];
 
        
         print("Server received information, that client has loaded scene");

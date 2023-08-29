@@ -93,7 +93,7 @@ public class MatchMaker : NetworkBehaviour
     
     
     
-    public static string GetRandomMatchID()
+    public static string GetRandomID()
     {
         string _id = string.Empty;
 

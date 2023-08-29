@@ -14,6 +14,8 @@ public class CustomNetworkManager : NetworkManager
     
     [Header("Lobbying")]
     [Scene] public string GameScene;
+
+    public static Action OnServerStarted;
     
     void Start()
     {
@@ -35,7 +37,7 @@ public class CustomNetworkManager : NetworkManager
     {
         
         NetworkServer.RegisterHandler<GameManager.SceneLoadedMessage>(SceneLoaded);
-        
+        OnServerStarted.Invoke();
         // spawnPrefabs = Resources.LoadAll<GameObject>("SpawnablePrefabs").ToList();
     }
 
@@ -61,5 +63,7 @@ public class CustomNetworkManager : NetworkManager
         }
         */
     }
+
+   
 
 }

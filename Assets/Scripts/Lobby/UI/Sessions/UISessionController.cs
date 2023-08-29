@@ -70,7 +70,7 @@ public class UISessionController : MonoBehaviour
     {
         string name = nameInputField.text;
         int maxPlayers = Convert.ToInt32(playersInputField.text);
-        string matchId = MatchMaker.GetRandomMatchID();
+        string matchId = MatchMaker.GetRandomID();
         print(name);
         Match match = MatchMaker.Instance.CreateMatch(name, matchId, maxPlayers);
         

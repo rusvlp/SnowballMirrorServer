@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -38,6 +39,8 @@ public class GXRInputManager : MonoBehaviour
     [SerializeField] public bool AButtonPressed;
     private void Awake()
     {
+        
+        
         inputActions = new GenericXRController();
         inputActions.Enable();
 
@@ -50,6 +53,11 @@ public class GXRInputManager : MonoBehaviour
         inputActions.LeftHand.TriggerValue.performed += LeftHand.TriggerPress;
 
         inputActions.RightHand.AButton.performed += AButtonPress;
+        
+        //GetComponent<GXRInputManager>().enabled = true;
+
+
+
     }
 
     private void AButtonPress(InputAction.CallbackContext obj)
@@ -58,6 +66,7 @@ public class GXRInputManager : MonoBehaviour
         OnAButtonPressed.Invoke();
     }
 
+    
     //private void LeftStickMove(InputAction.CallbackContext obj)
     //{
     //    LeftStickValue = obj.ReadValue<Vector2>();
@@ -149,16 +158,28 @@ public class GXRInputManager : MonoBehaviour
 
     private void OnEnable()
     {
+       
+        
         inputActions.Enable();
-    }
+        InGameVRPlayer.SettingGXRInputManager += OnLocalPlayerCreated;
+        print("GXR Event Handler registered");
+    } 
 
     private void OnDisable()
     {
         inputActions.Disable();
+        InGameVRPlayer.SettingGXRInputManager -= OnLocalPlayerCreated;
     }
 
     private void OnDestroy()
     {
         inputActions.Dispose();
+    }
+
+    private GXRInputManager OnLocalPlayerCreated()
+    {
+        print("GXR Event Handler Method is called");
+        
+        return this;
     }
 }

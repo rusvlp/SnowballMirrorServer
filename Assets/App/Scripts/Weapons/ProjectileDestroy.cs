@@ -10,14 +10,18 @@ namespace App.Scripts
     {
         [SerializeField] AudioSource AudioSource;
         [SerializeField] ParticleSystem ParticleSystem;
-
+        [SerializeField] private bool noAudio = true;
         float duration;
         float curTime = 0;
         private void Start()
         {
-            duration = AudioSource.clip.length;
-            AudioSource.Play();
-            ParticleSystem.Play();
+            if (!noAudio)
+            {
+                duration = AudioSource.clip.length;
+                AudioSource.Play();
+                ParticleSystem.Play();
+            }
+       
         }
 
         private void FixedUpdate()

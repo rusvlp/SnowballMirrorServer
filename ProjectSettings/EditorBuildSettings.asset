@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Mirror/Examples/MultipleAdditiveScenes/Scenes/Game.unity
     guid: d45ed07e5475d4740812c97ae565255c
+  - enabled: 1
+    path: Assets/Scenes/OnlineVRScene.unity
+    guid: f97f5cb09b8db0e42b7a2ed3696bbde1
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 176b95ad07fa08a4dbb4994ef8fe9fd0, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: af6df8f794c8a5c4393a7918075d723d, type: 2}

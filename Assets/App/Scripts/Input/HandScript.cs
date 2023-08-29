@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game.Sync;
+using Mirror;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit;
 
-public class HandScript : MonoBehaviour
+public class HandScript : MonoBehaviour, ILocalPlayerControl
 {
     enum HandRole
     {
@@ -12,6 +15,8 @@ public class HandScript : MonoBehaviour
         LeftHand
     }
 
+
+    [SerializeField] private NetworkBehaviour XROrigin;
     [SerializeField] GXRInputManager _inputManager;
     [SerializeField] HandRole _handRole;
 
@@ -28,9 +33,16 @@ public class HandScript : MonoBehaviour
     public UnityEvent OnTriggerPressed = new UnityEvent();
     public UnityEvent<float> OnTriggerUpdated = new UnityEvent<float>();
     public UnityEvent OnTriggerReleased = new UnityEvent();
+
+    public bool IsOwnedAndClient = true;
+
+    [SerializeField] private XRController _handController;
     void Start()
     {
-        
+        if (!IsOwnedAndClient)
+        {
+            _handController.enabled = false;
+        }
     }
 
     // Update is called once per frame
@@ -46,45 +58,60 @@ public class HandScript : MonoBehaviour
 
     public void TriggerPress(InputAction.CallbackContext obj)
     {
-    TriggerValue = obj.ReadValue<float>();
-        if (TriggerValue > _inputManager.TriggerThreshold.x && TriggerValue < _inputManager.TriggerThreshold.y)
+        if (IsOwnedAndClient)
         {
-            OnTriggerUpdated.Invoke(TriggerValue);
+            TriggerValue = obj.ReadValue<float>();
+            if (TriggerValue > _inputManager.TriggerThreshold.x && TriggerValue < _inputManager.TriggerThreshold.y)
+            {
+                OnTriggerUpdated.Invoke(TriggerValue);
+            }
+            if (!TriggerPressed && TriggerValue > _inputManager.TriggerThreshold.y)
+            {
+                OnTriggerPressed.Invoke();
+                TriggerPressed = true;
+            }
+            if (TriggerPressed && TriggerValue < _inputManager.TriggerThreshold.x)
+            {
+                OnTriggerReleased.Invoke();
+                TriggerPressed = false;
+            }
         }
-        if (!TriggerPressed && TriggerValue > _inputManager.TriggerThreshold.y)
-        {
-            OnTriggerPressed.Invoke();
-            TriggerPressed = true;
-        }
-        if (TriggerPressed && TriggerValue < _inputManager.TriggerThreshold.x)
-        {
-            OnTriggerReleased.Invoke();
-            TriggerPressed = false;
-        }
+        
+    
     }
 
     public void GripPress(InputAction.CallbackContext obj)
     {
-        GripValue = obj.ReadValue<float>();
-        if (GripValue > _inputManager.GripThreshold.x && GripValue < _inputManager.GripThreshold.y)
+        if (IsOwnedAndClient)
         {
-            OnGripUpdated.Invoke(GripValue);
+            GripValue = obj.ReadValue<float>();
+            if (GripValue > _inputManager.GripThreshold.x && GripValue < _inputManager.GripThreshold.y)
+            {
+                OnGripUpdated.Invoke(GripValue);
+            }
+            if (!GripPressed && GripValue > _inputManager.GripThreshold.y)
+            {
+                OnGripPressed.Invoke();
+                GripPressed = true;
+            }
+            if (GripPressed && GripValue < _inputManager.GripThreshold.x)
+            {
+                OnGripReleased.Invoke();
+                GripPressed = false;
+            }
         }
-        if (!GripPressed && GripValue > _inputManager.GripThreshold.y)
-        {
-            OnGripPressed.Invoke();
-            GripPressed = true;
-        }
-        if (GripPressed && GripValue < _inputManager.GripThreshold.x)
-        {
-            OnGripReleased.Invoke();
-            GripPressed = false;
-        }
+        
+        
     }
 
     public bool isRight()
     {
         if (_handRole == HandRole.RightHand) return true;
         return false;
+    }
+
+    public void SetIsClientAndOwned(bool value)
+    {
+        this.IsOwnedAndClient = value;
     }
 }
