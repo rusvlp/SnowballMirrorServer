@@ -69,7 +69,12 @@ public class CustomNetworkDiscovery : NetworkDiscoveryBase<DiscoveryRequest, Dis
         
         
         base.Start();
-       
+
+        if (GameplayDevelopmentModeManager.Instance != null &&
+            GameplayDevelopmentModeManager.Instance.isGameplayDevelopmentMode)
+        {
+            StartSearch();
+        }
     }
 
     
@@ -114,8 +119,26 @@ public class CustomNetworkDiscovery : NetworkDiscoveryBase<DiscoveryRequest, Dis
 
         print("Response processed");
         
+        
+        
         OnServerFound.Invoke(response);
+        
+        if (GameplayDevelopmentModeManager.Instance != null &&
+            GameplayDevelopmentModeManager.Instance.isGameplayDevelopmentMode)
+        {
+            Connect(response);
+        }
+        
+        
+        
     }
+
+    private void Connect(DiscoveryResponse response)
+    {
+        CustomNetworkManager.Instance.networkAddress = response.uri.Host;
+        CustomNetworkManager.Instance.StartClient();
+    }
+    
     
     #endregion
 

@@ -95,7 +95,7 @@ using UnityEngine;
 
 namespace App.Scripts.Weapons
 {
-    public class LaunchSystem : NetworkBehaviour
+    public class LaunchSystem : MonoBehaviour
     {
         [HideInInspector] public bool LaunchPhase;
 

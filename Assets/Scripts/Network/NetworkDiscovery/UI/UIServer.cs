@@ -40,6 +40,9 @@ public class UIServer : MonoBehaviour
 
         _serverIdTmp.text = serverId;
         _serverIpTmp.text = serverIp;
+
+        
+        
     }
 
 
