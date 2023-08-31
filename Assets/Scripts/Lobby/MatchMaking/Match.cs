@@ -96,7 +96,8 @@ public class Match : NetworkBehaviour
                 
                 ep.PlayerStatus = global::Status.InGame;
                 ep.GetComponent<NetworkMatch>().matchId = GetComponent<NetworkMatch>().matchId;
-              
+
+                ep.SceneForPlayer = this.GameScene;
                 ep.StartGame();
             }
         }
