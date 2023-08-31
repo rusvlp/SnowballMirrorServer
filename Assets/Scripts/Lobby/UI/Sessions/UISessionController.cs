@@ -28,8 +28,29 @@ public class UISessionController : MonoBehaviour
     void Start()
     {
         Instance = this;
+
+        if (GameplayDevelopmentModeManager.Instance != null &&
+            GameplayDevelopmentModeManager.Instance.autoCreateSessionAtStartServer)
+        {
+            CreateMockSession();
+        }
+        
     }
 
+    void CreateMockSession()
+    {
+        Match match = MatchMaker.Instance.CreateMatch("Mock", MatchMaker.GetRandomID(), 10);
+        
+        if (match != null)
+        {
+            UISession uiSession = Instantiate(uiSessionPrefab, parent).GetComponent<UISession>();
+            uiSession.MatchSession = match;
+            sessions.Add(uiSession);
+            match.StartMatch();
+          //  OpenCloseCreateSessionWindow();
+        }
+    }
+    
     // Update is called once per frame
     void Update()
     {

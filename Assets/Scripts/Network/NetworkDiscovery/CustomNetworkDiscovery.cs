@@ -69,10 +69,13 @@ public class CustomNetworkDiscovery : NetworkDiscoveryBase<DiscoveryRequest, Dis
         
         
         base.Start();
-
+        
+       
+        
         if (GameplayDevelopmentModeManager.Instance != null &&
             GameplayDevelopmentModeManager.Instance.isGameplayDevelopmentMode)
         {
+
             StartSearch();
         }
     }

@@ -58,6 +58,13 @@ public class EmptyPlayer : NetworkBehaviour
             CmdAddPlayerToList();
             this.Fingerprint = SystemInfo.deviceUniqueIdentifier;
         }
+
+
+        if (GameplayDevelopmentModeManager.Instance != null &&
+            GameplayDevelopmentModeManager.Instance.addPlayerToMatchAfterConnecting)
+        {
+            MatchMaker.Instance.Matches[0].GetComponent<Match>().AddPlayerToMatch(this);
+        }
     }
 
     // Update is called once per frame
@@ -69,6 +76,7 @@ public class EmptyPlayer : NetworkBehaviour
     private void OnEnable()
     {
         CustomNetworkManager.OnSceneLoaded += SceneLoadedHandler;
+        
     }
 
     private void OnDisable()

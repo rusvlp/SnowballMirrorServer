@@ -60,7 +60,7 @@ public class MatchMaker : NetworkBehaviour
 
     private void UnloadMatchScene()
     {
-        CreateMatch("Mock Match", GetRandomID(), 10);
+        
     }
 
     public bool AddPlayerToMatch(EmptyPlayer player, string matchId, out int indexInMatch)
@@ -86,11 +86,7 @@ public class MatchMaker : NetworkBehaviour
     void Start()
     {
         Instance = this;
-        if (GameplayDevelopmentModeManager.Instance != null &&
-            GameplayDevelopmentModeManager.Instance.autoCreateSessionAtStartServer)
-        {
-            
-        }
+        
     }
 
     

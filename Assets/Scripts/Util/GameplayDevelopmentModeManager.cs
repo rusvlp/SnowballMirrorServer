@@ -10,11 +10,19 @@ public class GameplayDevelopmentModeManager : MonoBehaviour
     public bool isGameplayDevelopmentMode = true;
 
     public bool autoCreateSessionAtStartServer = true;
+
+    public bool addPlayerToMatchAfterConnecting = true;
     // Start is called before the first frame update
+
+    void Awake()
+    {
+        Instance = this;
+    }
+    
     void Start()
     {
         DontDestroyOnLoad(this);
-        Instance = this;
+        
     }
 
     // Update is called once per frame
