@@ -10,7 +10,7 @@ using UnityEngine.Serialization;
 public class EmptyPlayer : NetworkBehaviour
 {
 
-
+    [SyncVar]
     public int PlayerGlobalIndex;
     
     [SyncVar]
@@ -173,6 +173,8 @@ public class EmptyPlayer : NetworkBehaviour
         
         this.PlayerInGame = Instantiate(playerPrefab, position, rotation);
 
+        PlayerInGame.GetComponent<InGameVRPlayer>().GlobalID = PlayerGlobalIndex;
+        
         NetworkServer.Spawn(PlayerInGame, connectionToClient);
         yield return new WaitForEndOfFrame();
         SceneManager.MoveGameObjectToScene(this.PlayerInGame, SceneForPlayer);

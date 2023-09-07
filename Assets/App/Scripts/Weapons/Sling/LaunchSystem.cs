@@ -121,6 +121,7 @@ namespace App.Scripts.Weapons
 
         void BallInit()
         {
+            print("Shoot!");
             _snowBall = Instantiate(_ballPrefab, _anchor.position, Quaternion.identity, _sceneConfiguration.BulletsParent).GetComponent<Ball>();
             _snowBall.MeshRenderer.material = _slingshotConfiguration.GhostMaterial;
         }

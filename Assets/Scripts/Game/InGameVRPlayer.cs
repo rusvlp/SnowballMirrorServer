@@ -23,12 +23,16 @@ public class InGameVRPlayer : NetworkBehaviour
     [SerializeField] private HeadFollowScript _headFollow;
     [SerializeField] private HeightSettings _heightSettings;
 
+    [Header("ID")]
+    [SyncVar] public int GlobalID;
+    
     private List<ILocalPlayerControl> _localPlayerControls = new List<ILocalPlayerControl>();
     public static Func<GXRInputManager> SettingGXRInputManager;
 
     // Start is called before the first frame update
     void Start()
     {
+        
         
         SetupPlayerControls();
         
@@ -64,6 +68,7 @@ public class InGameVRPlayer : NetworkBehaviour
         print("SetUpDependencies is called");
         foreach (ILocalPlayerControl ilpc in _localPlayerControls)
         {
+            print($"Setting isClientAndOwned TRUE, cl: {ilpc.GetType()}, gID: {GlobalID}");
             ilpc.SetIsClientAndOwned(true);
         }
 
@@ -74,6 +79,7 @@ public class InGameVRPlayer : NetworkBehaviour
         _camera.enabled = false;
         foreach (ILocalPlayerControl ilpc in _localPlayerControls)
         {
+            print($"Setting isClientAndOwned FALSE, cl: {ilpc.GetType()}, gID: {GlobalID}");
             ilpc.SetIsClientAndOwned(false);
         }
     }

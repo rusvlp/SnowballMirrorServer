@@ -46,6 +46,6 @@ public class HeightSettings : MonoBehaviour, ILocalPlayerControl
 
     public void SetIsClientAndOwned(bool value)
     {
-        this.IsClientAndOwned = true;
+        this.IsClientAndOwned = value;
     }
 }
