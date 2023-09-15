@@ -16,7 +16,7 @@ public class HandScript : MonoBehaviour, ILocalPlayerControl
     }
 
 
-    [SerializeField] private NetworkBehaviour XROrigin;
+  //  [SerializeField] private NetworkBehaviour XROrigin;
     [SerializeField] GXRInputManager _inputManager;
     [SerializeField] HandRole _handRole;
 
