@@ -600,7 +600,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e8fb6d7f3c9c584d91146cbc4a10bf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  XROrigin: {fileID: 5557110635991603504}
   _inputManager: {fileID: 4291337117935950969}
   _handRole: 0
   StickValue: {x: 0, y: 0}
@@ -992,7 +991,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e8fb6d7f3c9c584d91146cbc4a10bf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  XROrigin: {fileID: 5557110635991603504}
   _inputManager: {fileID: 4291337117935950969}
   _handRole: 1
   StickValue: {x: 0, y: 0}
@@ -2145,6 +2143,7 @@ MonoBehaviour:
   _leftHandScript: {fileID: 1734784512555591527}
   _headFollow: {fileID: 8871196042959771982}
   _heightSettings: {fileID: 5579157732880435239}
+  GlobalID: 0
 --- !u!114 &3452130526967560290
 MonoBehaviour:
   m_ObjectHideFlags: 0

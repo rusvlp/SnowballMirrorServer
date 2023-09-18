@@ -1,9 +1,10 @@
 using App.Scripts.Controllers;
+using Mirror;
 using UnityEngine;
 
 namespace App.Scripts.Weapons
 {
-    public class ProjectileScipt : MonoBehaviour
+    public class ProjectileScipt : NetworkBehaviour
     {
         [SerializeField] bool IsLaunched = false;
         [SerializeField] public Vector3 Velocity;
@@ -19,6 +20,11 @@ namespace App.Scripts.Weapons
         void Awake()
         {
             _projectileConfiguration = GameController.Instance.Configuration.ProjectileConfiguration;
+            if (isServer)
+            {
+                netIdentity.AssignClientAuthority(connectionToClient);
+            }
+            
         }
         void Update()
         {
@@ -59,12 +65,35 @@ namespace App.Scripts.Weapons
 
         public void Launch(Vector3 velocity)
         {
+           
             IsLaunched = true;
             _fromPosition = this.transform.position;
             _prevPosition = _fromPosition;
             this.Velocity = velocity;
+            
+            print("projectile is launched");
+            CmdNetworkSpawn();
+            CmdLaunch(velocity);
         }
 
+        [Command]
+        public void CmdNetworkSpawn(NetworkConnectionToClient conn = null)
+        {
+            print($"Spawned a snowball, issuer connection: {conn}");
+            NetworkServer.Spawn(this.gameObject, conn);
+        }
+        
+        [Command]
+        public void CmdLaunch(Vector3 velocity)
+        {
+            IsLaunched = true;
+            _fromPosition = this.transform.position;
+            _prevPosition = _fromPosition;
+            this.Velocity = velocity;
+            
+            print("projectile is launched");
+        }
+        
         /*private void OnTriggerEnter(Collider other)
     {
         if (IsLaunched && other.gameObject.tag != "Weapon")

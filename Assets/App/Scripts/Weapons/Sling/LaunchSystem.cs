@@ -121,7 +121,7 @@ namespace App.Scripts.Weapons
 
         void BallInit()
         {
-            print("Shoot!");
+            print("Ball initialized");
             _snowBall = Instantiate(_ballPrefab, _anchor.position, Quaternion.identity, _sceneConfiguration.BulletsParent).GetComponent<Ball>();
             _snowBall.MeshRenderer.material = _slingshotConfiguration.GhostMaterial;
         }
@@ -170,6 +170,11 @@ namespace App.Scripts.Weapons
                 {
                     if (LaunchPhase)
                     {
+                        /*
+                         * Где-то в этом месте должен быть код для спавна снежка по сети
+                         */
+                        
+                        
                         Debug.Log("Phase!");
                         //_trajRender.HideLine();
                         _snowBall.ProjectileScipt.Launch(-_direction * _slingshotConfiguration.Power);
